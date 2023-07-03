@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-md-12">
+        <h5>{{title_alumnos}}</h5>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover text-center table-dark">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>DNI</th>
+                        <th>Carrera</th>
+                        <th>1° Parcial</th>
+                        <th>2° Parcial</th>
+                        <th>Final</th>
+                        <th>Aprobado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let usuario of usuarios; let i = index">
+                        <td>{{usuario.nombre | titlecase}}</td>
+                        <td>{{usuario.apellido | titlecase}}</td>
+                        <td>{{usuario.dni}}</td>
+                        <td>{{usuario.carrera}}</td>
+                        <td [ngClass]="usuario.parcial_1 > 3 ? 'text-success' : 'text-danger'"><span *ngIf="usuario.parcial_1 > 0;else parcial_1">{{usuario.parcial_1}}</span></td>
+                        <ng-template #parcial_1>
+                            <span>{{no_se_presento}}</span>
+                        </ng-template>
+                        <td [ngClass]="usuario.parcial_2 > 3 ? 'text-success' : 'text-danger'"><span *ngIf="usuario.parcial_2 > 0;else parcial_2">{{usuario.parcial_2}}</span></td>
+                        <ng-template #parcial_2>
+                            <span>{{no_se_presento}}</span>
+                        </ng-template>
+                        <td [ngClass]="usuario.nota_final > 3 && usuario.parcial_1 > 3 && usuario.parcial_2 > 3 ? 'text-success' : 'text-danger'"><span *ngIf="usuario.nota_final > 0 && usuario.parcial_1 > 3 && usuario.parcial_2 > 3;else bloqueElse1">{{usuario.nota_final}}</span></td>
+                  
+                        <ng-template #bloqueElse1>
+                            <ng-container *ngIf="usuario.parcial_1 > 3 && usuario.parcial_2 > 3;then final else bloqueElse2">
+                        </ng-container>
+                        <ng-template #final>
+                            <span>{{no_se_presento}}</span>
+                        </ng-template>
+                        <ng-template #bloqueElse2>
+                            <span>{{no_apto_rendir_final}}</span>
+                        </ng-template>
+                        </ng-template>
+                        <td [ngClass]="usuario.nota_final > 3 && usuario.parcial_1 > 3 && usuario.parcial_2 > 3 ? 'bg-success' : 'bg-danger'"><span *ngIf="usuario.nota_final > 3 && usuario.parcial_1 > 3 && usuario.parcial_2 > 3;else desaprobado">Si</span></td>
+                        <ng-template #desaprobado>
+                            <span>No</span>
+                        </ng-template>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</div>
